@@ -7,15 +7,15 @@
 define(function(require, exports, module) {
 
     var completeUtil = require("ext/codecomplete/complete_util");
-    var xqCompletion = require('ext/xquery/xquery_completion');
+    var xqCompletion = require('./xquery_completion');
     var baseLanguageHandler = require('ext/language/base_handler');
-    var XQueryParser = require('ext/xquery/lib/XQueryParser').XQueryParser;
-    var JSONParseTreeHandler = require('ext/xquery/lib/JSONParseTreeHandler').JSONParseTreeHandler;
-    var CodeFormatter = require('ext/xquery/lib/visitors/CodeFormatter').CodeFormatter;
-    var Compiler = require('ext/xquery/lib/Compiler').Compiler;
-    var Utils = require('ext/xquery/lib/utils').Utils;
-    // var XQueryResolver = require('ext/xquery/quickfix/XQueryResolver').XQueryResolver; // Waiting for quickfix integration
-    var Refactoring = require('ext/xquery/refactoring').Refactoring;
+    var XQueryParser = require('./lib/XQueryParser').XQueryParser;
+    var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler').JSONParseTreeHandler;
+    var CodeFormatter = require('./lib/visitors/CodeFormatter').CodeFormatter;
+    var Compiler = require('./lib/Compiler').Compiler;
+    var Utils = require('./lib/utils').Utils;
+    // var XQueryResolver = require('./XQueryResolver').XQueryResolver; // Waiting for quickfix integration
+    var Refactoring = require('./refactoring').Refactoring;
     
     var handler = module.exports = Object.create(baseLanguageHandler);
 
@@ -56,6 +56,7 @@ define(function(require, exports, module) {
     handler.analyze = function(doc, ast, callback) {
                 
         if(builtin === null) {
+          // TODO does this path work?
           var text = completeUtil.fetchText('/static', 'ext/xquery/lib/builtin.json'); // TODO staticprefix is hardcoded here!
           builtin = JSON.parse(text);  
           if (!builtin){

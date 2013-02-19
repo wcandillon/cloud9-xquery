@@ -10,7 +10,6 @@ define(function(require, exports, module) {
   var ide = require("core/ide");
   var editors = require("ext/editors/editors");
   var language = require("ext/language/language");
-  var markup = require("text!ext/xquery/xquery.xml");
 
   var filelist = require("ext/filelist/filelist");
   //var code = require("ext/code/code");
@@ -19,9 +18,9 @@ define(function(require, exports, module) {
   var SnippetManager = require("ace/snippets").SnippetManager;
 
   var commands = require("ext/commands/commands");
-  var XQueryParser = require('ext/xquery/lib/XQueryParser').XQueryParser;
-  var JSONParseTreeHandler = require('ext/xquery/lib/JSONParseTreeHandler').JSONParseTreeHandler;
-  var CodeFormatter = require('ext/xquery/lib/visitors/CodeFormatter').CodeFormatter;
+  var XQueryParser = require('./lib/XQueryParser').XQueryParser;
+  var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler').JSONParseTreeHandler;
+  var CodeFormatter = require('./lib/visitors/CodeFormatter').CodeFormatter;
 
   module.exports = ext.register("ext/xquery/xquery", {
     name    : "XQuery Language Support",
@@ -29,7 +28,6 @@ define(function(require, exports, module) {
     type    : ext.GENERAL,
     deps    : [editors, language],
     nodes   : [],
-    markup  : markup,
     alone   : true,
 
     hook: function() {
@@ -83,7 +81,7 @@ define(function(require, exports, module) {
       });
 
 
-
+      // TODO check if this path works
       language.registerLanguageHandler('ext/xquery/compiler');
 
       ide.addEventListener("extload", this.$extLoad = function(){

@@ -6,16 +6,16 @@ define(function(require, exports, module) {
 var markerResolution = require('ext/language/MarkerResolution').MarkerResolution;
 
 // Visitors
-var VariableRemover = require('ext/xquery/lib/visitors/VariableRemover').VariableRemover;
-var NamespaceRemover = require('ext/xquery/lib/visitors/NamespaceRemover').NamespaceRemover;
-var Renamer = require('ext/xquery/lib/visitors/Renamer').Renamer;
-var Adder = require('ext/xquery/lib/visitors/Adder').Adder;
+var VariableRemover = require('./lib/visitors/VariableRemover').VariableRemover;
+var NamespaceRemover = require('./lib/visitors/NamespaceRemover').NamespaceRemover;
+var Renamer = require('./lib/visitors/Renamer').Renamer;
+var Adder = require('./lib/visitors/Adder').Adder;
 
 
 // TODO change to c9 quickfix images
-var IMG_DELETE = '/ext/xquery/images/delete_obj.gif';
-var IMG_ADD = '/ext/xquery/images/add_obj.gif';
-var IMG_CHANGE = '/ext/xquery/images/correction_change.gif';
+var IMG_DELETE = './images/delete_obj.gif';
+var IMG_ADD = './images/add_obj.gif';
+var IMG_CHANGE = './images/correction_change.gif';
 
 var NUM_NSRENAME_SUGGESTIONS = 5;
 
