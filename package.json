@@ -1,0 +1,14 @@
+{
+    "name": "ext.xquery",
+    "version": "0.0.1",
+    "main": "xquery-ext.js",
+    "private": true,
+    "plugin": {
+        "provides": [
+            "ext.xquery"
+        ],
+        "consumes": [
+            "client-plugins"
+        ]
+    }
+}
