@@ -16,9 +16,9 @@ define(function(require, exports, module) {
   var commands = require("ext/commands/commands");
 
   var commands = require("ext/commands/commands");
-  var XQueryParser = require('./lib/XQueryParser').XQueryParser;
-  var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler').JSONParseTreeHandler;
-  var CodeFormatter = require('./lib/visitors/CodeFormatter').CodeFormatter;
+  var XQueryParser = require('./lib/XQueryParser.js').XQueryParser;
+  var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler.js').JSONParseTreeHandler;
+  var CodeFormatter = require('./lib/visitors/CodeFormatter.js').CodeFormatter;
 
   module.exports = ext.register("ext/xquery/xquery", {
     name    : "XQuery Language Support",
