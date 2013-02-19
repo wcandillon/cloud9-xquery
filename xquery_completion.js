@@ -7,7 +7,7 @@
 define(function(require, exports, module) {
 
 var completeUtil = require("ext/codecomplete/complete_util");
-var Utils = require('./lib/utils').Utils;
+var Utils = require('./lib/utils.js').Utils;
 
 var uriRegex = /[a-zA-Z_0-9\/\.:\-#]/;
 

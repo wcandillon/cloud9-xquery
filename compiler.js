@@ -7,13 +7,13 @@
 define(function(require, exports, module) {
 
     var completeUtil = require("ext/codecomplete/complete_util");
-    var xqCompletion = require('./xquery_completion');
+    var xqCompletion = require('./xquery_completion.js');
     var baseLanguageHandler = require('ext/language/base_handler');
-    var XQueryParser = require('./lib/XQueryParser').XQueryParser;
-    var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler').JSONParseTreeHandler;
-    var CodeFormatter = require('./lib/visitors/CodeFormatter').CodeFormatter;
-    var Compiler = require('./lib/Compiler').Compiler;
-    var Utils = require('./lib/utils').Utils;
+    var XQueryParser = require('./lib/XQueryParser.js').XQueryParser;
+    var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler.js').JSONParseTreeHandler;
+    var CodeFormatter = require('./lib/visitors/CodeFormatter.js').CodeFormatter;
+    var Compiler = require('./lib/Compiler.js').Compiler;
+    var Utils = require('./lib/utils.js').Utils;
     // var XQueryResolver = require('./XQueryResolver').XQueryResolver; // Waiting for quickfix integration
     var Refactoring = require('./refactoring').Refactoring;
     
