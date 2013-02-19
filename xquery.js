@@ -15,8 +15,6 @@ define(function(require, exports, module) {
   //var code = require("ext/code/code");
   var commands = require("ext/commands/commands");
 
-  var SnippetManager = require("ace/snippets").SnippetManager;
-
   var commands = require("ext/commands/commands");
   var XQueryParser = require('./lib/XQueryParser').XQueryParser;
   var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler').JSONParseTreeHandler;
@@ -33,87 +31,39 @@ define(function(require, exports, module) {
     hook: function() {
       var _self = this;
 
-      SnippetManager.register({ 
-        content: 'import module namespace ${1:ns} = "${2:http://www.example.com/}";',
-      tabTrigger: "import",
-      name: "ImportModule"
-      });  
-
-      SnippetManager.register({ 
-        content: 'import schema namespace ${1:ns} = "${2:http://www.example.com/}";',
-        tabTrigger: "schema",
-        name: "ImportSchema"
-      });  
-
-      SnippetManager.register({ 
-        content: 'for $${1:item} in ${2:expression}\nreturn $${3:item}',
-        tabTrigger: "flwor",
-        name: "FLWOR"
-      });
-
-      SnippetManager.register({ 
-        content: 'for $${1:item} in ${2:expression}',
-        tabTrigger: "for",
-        name: "ForClause"
-      });    
-
-      SnippetManager.register({ 
-        content: 'let $${1:var} := ${2:expression}',
-        tabTrigger: "let",
-        name: "LetClause"
-      });
-
-      SnippetManager.register({ 
-        content: 'group by $${1:var}',
-        tabTrigger: "group",
-        name: "GroupByClause"
-      });
-
-      commands.addCommand({
-        name: "snippet",
-        hint: "code snippet",
-        bindKey: {mac: "Tab", win: "Tab"},
-        isAvailable : function(editor){
-          return SnippetManager.expandWithTab(editor.amlEditor.$editor);
-        },
-        exec: function () {
-              }
-      });
-
 
       // TODO check if this path works
-      language.registerLanguageHandler('ext/xquery/compiler');
+      //language.registerLanguageHandler('ext/xquery/compiler');
 
-      ide.addEventListener("extload", this.$extLoad = function(){
-        _self.updateFileCache();
-      });
+      /*
+         ide.addEventListener("extload", this.$extLoad = function(){
+         _self.updateFileCache();
+         });
 
-      ide.addEventListener("newfile", this.$newFile = function() {
-        _self.updateFileCache(true);
-      });
+         ide.addEventListener("newfile", this.$newFile = function() {
+         _self.updateFileCache(true);
+         });
 
-      ide.addEventListener("removefile", this.$removeFile = function() {
-        _self.updateFileCache(true);
-      });
+         ide.addEventListener("removefile", this.$removeFile = function() {
+         _self.updateFileCache(true);
+         });
 
-      ide.addEventListener("afteropenfile", function(event){
-        ext.initExtension(_self);
-      });        
+*/
 
       commands.addCommand({
         name: "beautify",
-        hint: "reformat selected XQuery code in the editor",
-        msg: "Beautifying selection.",
-        bindKey: {mac: "Command-Shift-X", win: "Shift-Ctrl-X"},
-        isAvailable : function(editor){
-          if (editor && editor.path == "ext/code/code") {
-            return true;
-          }
-          return false;
-        },
-        exec: function (editor) {
-                _self.beautify(editor);
-              }
+      hint: "reformat selected XQuery code in the editor",
+      msg: "Beautifying selection.",
+      bindKey: {mac: "Command-Shift-X", win: "Shift-Ctrl-X"},
+      isAvailable : function(editor){
+        if (editor && editor.path == "ext/code/code") {
+          return true;
+        }
+        return false;
+      },
+      exec: function (editor) {
+              _self.beautify(editor);
+            }
       });
 
     },
