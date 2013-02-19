@@ -2,3 +2,12 @@ cloud9-xquery
 =============
 
 XQuery extension for cloud9 IDE
+
+
+Installation
+------------
+
+Open the `Tools -> Extension Manager` window in Cloud9, and enter the extension
+path:
+
+    https://github.com/ldoblies/cloud9-xquery
