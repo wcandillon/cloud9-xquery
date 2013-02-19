@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
 
       // TODO check if this path works
-      language.registerLanguageHandler('ext/xquery/compiler');
+      // language.registerLanguageHandler('ext/xquery/compiler');
 
       /*
          ide.addEventListener("extload", this.$extLoad = function(){
