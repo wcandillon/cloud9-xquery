@@ -32,8 +32,9 @@ define(function(require, exports, module) {
       var _self = this;
 
 
-      // TODO check if this path works
-      // language.registerLanguageHandler('ext/xquery/compiler');
+      language.registerLanguageHandler(
+        'ext/cloud9-xquery/cloud9-xquery-worker',
+        require('./cloud9-xquery-worker-built-wrapped.js'));
 
       /*
          ide.addEventListener("extload", this.$extLoad = function(){
