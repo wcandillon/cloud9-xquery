@@ -308,7 +308,7 @@ return '\n' +
 '\n' +
 '});\n' +
 '\n' +
-'// This file was generated on Thu Jan 31, 2013 17:36 (UTC+01) by REx v5.22 which is Copyright (c) 1979-2013 by Gunther Rademacher <grd@gmx.net>\n' +
+'// This file was generated on Thu Jan 31, 2013 17:36 (UTC+01) by REx v5.22 which is Copyright (c) 1979-2013 by Gunther Rademacher <grd_at_gmx.net>\n' +
 '// REx command line: XQueryParser.ebnf -ll 2 -backtrack -tree -javascript -a xqlint\n' +
 '\n' +
 '                                                            // line 2 "XQueryParser.ebnf"\n' +

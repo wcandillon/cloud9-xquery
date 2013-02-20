@@ -306,7 +306,7 @@ module.exports.completeFunction = completeFunction;
 
 });
 
-// This file was generated on Thu Jan 31, 2013 17:36 (UTC+01) by REx v5.22 which is Copyright (c) 1979-2013 by Gunther Rademacher <grd@gmx.net>
+// This file was generated on Thu Jan 31, 2013 17:36 (UTC+01) by REx v5.22 which is Copyright (c) 1979-2013 by Gunther Rademacher <grd_at_gmx.net>
 // REx command line: XQueryParser.ebnf -ll 2 -backtrack -tree -javascript -a xqlint
 
                                                             // line 2 "XQueryParser.ebnf"
