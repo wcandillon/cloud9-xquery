@@ -20,7 +20,7 @@ define(function(require, exports, module) {
   var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler.js').JSONParseTreeHandler;
   var CodeFormatter = require('./lib/visitors/CodeFormatter.js').CodeFormatter;
 
-  module.exports = ext.register("ext/xquery/xquery", {
+  module.exports = ext.register("ext/cloud9-xquery/cloud9-xquery", {
     name    : "XQuery Language Support",
     dev     : "28msec",
     type    : ext.GENERAL,
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
 
       language.registerLanguageHandler(
-        'ext/cloud9-xquery/cloud9-xquery-worker',
+        'ext/cloud9-xquery/cloud9-xquery-worker-built',
         require('./cloud9-xquery-worker-built-wrapped.js'));
 
       /*
