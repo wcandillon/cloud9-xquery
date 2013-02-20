@@ -34450,377 +34450,377 @@ return '\n' +
 '\n' +
 '\n' +
 ';\n' +
-'// This file was generated on Wed Dec 12, 2012 20:06 (UTC+01) by REx v5.20 which is Copyright (c) 1979-2012 by Gunther Rademacher <grd@gmx.net>\n' +
-'// REx command line: CommentParser.ebnf -tree -javascript -a xqlint\n' +
-'\n' +
-'                                                            // line 2 "CommentParser.ebnf"\n' +
-'                                                            /* ***** BEGIN LICENSE BLOCK *****\n' +
-'                                                             * Distributed under the BSD license:\n' +
-'                                                             *\n' +
-'                                                             * Copyright (c) 2010, Ajax.org B.V.\n' +
-'                                                             * All rights reserved.\n' +
-'                                                             *\n' +
-'                                                             * Redistribution and use in source and binary forms, with or without\n' +
-'                                                             * modification, are permitted provided that the following conditions are met:\n' +
-'                                                             *     * Redistributions of source code must retain the above copyright\n' +
-'                                                             *       notice, this list of conditions and the following disclaimer.\n' +
-'                                                             *     * Redistributions in binary form must reproduce the above copyright\n' +
-'                                                             *       notice, this list of conditions and the following disclaimer in the\n' +
-'                                                             *       documentation and/or other materials provided with the distribution.\n' +
-'                                                             *     * Neither the name of Ajax.org B.V. nor the\n' +
-'                                                             *       names of its contributors may be used to endorse or promote products\n' +
-'                                                             *       derived from this software without specific prior written permission.\n' +
-'                                                             *\n' +
-'                                                             * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND\n' +
-'                                                             * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\n' +
-'                                                             * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n' +
-'                                                             * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY\n' +
-'                                                             * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n' +
-'                                                             * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n' +
-'                                                             * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\n' +
-'                                                             * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n' +
-'                                                             * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n' +
-'                                                             * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n' +
-'                                                             *\n' +
-'                                                             * ***** END LICENSE BLOCK ***** */\n' +
-'\n' +
-'                                                            define(\'lib/CommentParser.js\',[\'require\',\'exports\',\'module\'],function(require, exports, module){\n' +
-'                                                            var CommentParser = exports.CommentParser = function CommentParser(string, parsingEventHandler)\n' +
-'                                                            {\n' +
-'                                                              init(string, parsingEventHandler);\n' +
-'                                                            // line 40 "CommentParser.js"\n' +
-'  var self = this;\n' +
-'\n' +
-'  this.ParseException = function(b, e, s, o, x)\n' +
-'  {\n' +
-'    var\n' +
-'      begin = b,\n' +
-'      end = e,\n' +
-'      state = s,\n' +
-'      offending = o,\n' +
-'      expected = x;\n' +
-'\n' +
-'    this.getBegin = function() {return begin;};\n' +
-'    this.getEnd = function() {return end;};\n' +
-'    this.getState = function() {return state;};\n' +
-'    this.getExpected = function() {return expected;};\n' +
-'    this.getOffending = function() {return offending;};\n' +
-'\n' +
-'    this.getMessage = function()\n' +
-'    {\n' +
-'      return offending < 0 ? "lexical analysis failed" : "syntax error";\n' +
-'    };\n' +
-'  };\n' +
-'\n' +
-'  function init(string, parsingEventHandler)\n' +
-'  {\n' +
-'    eventHandler = parsingEventHandler;\n' +
-'    input = string;\n' +
-'    size = string.length;\n' +
-'    reset(0, 0, 0);\n' +
-'  }\n' +
-'\n' +
-'  this.getInput = function()\n' +
-'  {\n' +
-'    return input;\n' +
-'  };\n' +
-'\n' +
-'  function reset(l, b, e)\n' +
-'  {\n' +
-'                 b0 = b; e0 = b;\n' +
-'    l1 = l; b1 = b; e1 = e;\n' +
-'    end = e;\n' +
-'    eventHandler.reset(input);\n' +
-'  }\n' +
-'\n' +
-'  this.getOffendingToken = function(e)\n' +
-'  {\n' +
-'    var o = e.getOffending();\n' +
-'    return o >= 0 ? CommentParser.TOKEN[o] : null;\n' +
-'  };\n' +
-'\n' +
-'  this.getExpectedTokenSet = function(e)\n' +
-'  {\n' +
-'    var expected;\n' +
-'    if (e.getExpected() < 0)\n' +
-'    {\n' +
-'      expected = getExpectedTokenSet(e.getState());\n' +
-'    }\n' +
-'    else\n' +
-'    {\n' +
-'      expected = [CommentParser.TOKEN[e.getExpected()]];\n' +
-'    }\n' +
-'    return expected;\n' +
-'  };\n' +
-'\n' +
-'  this.getErrorMessage = function(e)\n' +
-'  {\n' +
-'    var tokenSet = this.getExpectedTokenSet(e);\n' +
-'    var found = this.getOffendingToken(e);\n' +
-'    var prefix = input.substring(0, e.getBegin());\n' +
-'    var lines = prefix.split("\\n");\n' +
-'    var line = lines.length;\n' +
-'    var column = lines[line - 1].length + 1;\n' +
-'    var size = e.getEnd() - e.getBegin();\n' +
-'    return e.getMessage()\n' +
-'         + (found == null ? "" : ", found " + found)\n' +
-'         + "\\nwhile expecting "\n' +
-'         + (tokenSet.length == 1 ? tokenSet[0] : ("[" + tokenSet.join(", ") + "]"))\n' +
-'         + "\\n"\n' +
-'         + (size == 0 ? "" : "after successfully scanning " + size + " characters beginning ")\n' +
-'         + "at line " + line + ", column " + column + ":\\n..."\n' +
-'         + input.substring(e.getBegin(), Math.min(input.length, e.getBegin() + 64))\n' +
-'         + "...";\n' +
-'  };\n' +
-'\n' +
-'  this.parse_Comments = function()\n' +
-'  {\n' +
-'    eventHandler.startNonterminal("Comments", e0);\n' +
-'    for (;;)\n' +
-'    {\n' +
-'      lookahead1(0);                // S^WS | EOF | \'(:\'\n' +
-'      if (l1 == 3)                  // EOF\n' +
-'      {\n' +
-'        break;\n' +
-'      }\n' +
-'      switch (l1)\n' +
-'      {\n' +
-'      case 1:                       // S^WS\n' +
-'        shift(1);                   // S^WS\n' +
-'        break;\n' +
-'      default:\n' +
-'        parse_Comment();\n' +
-'      }\n' +
-'    }\n' +
-'    shift(3);                       // EOF\n' +
-'    eventHandler.endNonterminal("Comments", e0);\n' +
-'  };\n' +
-'\n' +
-'  function parse_Comment()\n' +
-'  {\n' +
-'    eventHandler.startNonterminal("Comment", e0);\n' +
-'    shift(4);                       // \'(:\'\n' +
-'    for (;;)\n' +
-'    {\n' +
-'      lookahead1(1);                // CommentContents | \'(:\' | \':)\'\n' +
-'      if (l1 == 5)                  // \':)\'\n' +
-'      {\n' +
-'        break;\n' +
-'      }\n' +
-'      switch (l1)\n' +
-'      {\n' +
-'      case 2:                       // CommentContents\n' +
-'        shift(2);                   // CommentContents\n' +
-'        break;\n' +
-'      default:\n' +
-'        parse_Comment();\n' +
-'      }\n' +
-'    }\n' +
-'    shift(5);                       // \':)\'\n' +
-'    eventHandler.endNonterminal("Comment", e0);\n' +
-'  }\n' +
-'\n' +
-'  var lk, b0, e0;\n' +
-'  var l1, b1, e1;\n' +
-'  var eventHandler;\n' +
-'\n' +
-'  function error(b, e, s, l, t)\n' +
-'  {\n' +
-'    throw new self.ParseException(b, e, s, l, t);\n' +
-'  }\n' +
-'\n' +
-'  function shift(t)\n' +
-'  {\n' +
-'    if (l1 == t)\n' +
-'    {\n' +
-'      eventHandler.terminal(CommentParser.TOKEN[l1], b1, e1 > size ? size : e1);\n' +
-'      b0 = b1; e0 = e1; l1 = 0;\n' +
-'    }\n' +
-'    else\n' +
-'    {\n' +
-'      error(b1, e1, 0, l1, t);\n' +
-'    }\n' +
-'  }\n' +
-'\n' +
-'  function lookahead1(set)\n' +
-'  {\n' +
-'    if (l1 == 0)\n' +
-'    {\n' +
-'      l1 = match(set);\n' +
-'      b1 = begin;\n' +
-'      e1 = end;\n' +
-'    }\n' +
-'  }\n' +
-'\n' +
-'  var input;\n' +
-'  var size;\n' +
-'  var begin;\n' +
-'  var end;\n' +
-'  var state;\n' +
-'\n' +
-'  function match(tokenset)\n' +
-'  {\n' +
-'    var nonbmp = false;\n' +
-'    begin = end;\n' +
-'    var current = end;\n' +
-'    var result = CommentParser.INITIAL[tokenset];\n' +
-'\n' +
-'    for (var code = result & 15; code != 0; )\n' +
-'    {\n' +
-'      var charclass;\n' +
-'      var c0 = current < size ? input.charCodeAt(current) : 0;\n' +
-'      ++current;\n' +
-'      if (c0 < 0x80)\n' +
-'      {\n' +
-'        charclass = CommentParser.MAP0[c0];\n' +
-'      }\n' +
-'      else if (c0 < 0xd800)\n' +
-'      {\n' +
-'        var c1 = c0 >> 5;\n' +
-'        charclass = CommentParser.MAP1[(c0 & 31) + CommentParser.MAP1[(c1 & 31) + CommentParser.MAP1[c1 >> 5]]];\n' +
-'      }\n' +
-'      else\n' +
-'      {\n' +
-'        if (c0 < 0xdc00)\n' +
-'        {\n' +
-'          var c1 = current < size ? input.charCodeAt(current) : 0;\n' +
-'          if (c1 >= 0xdc00 && c1 < 0xe000)\n' +
-'          {\n' +
-'            ++current;\n' +
-'            c0 = ((c0 & 0x3ff) << 10) + (c1 & 0x3ff) + 0x10000;\n' +
-'            nonbmp = true;\n' +
-'          }\n' +
-'        }\n' +
-'        var lo = 0, hi = 1;\n' +
-'        for (var m = 1; ; m = (hi + lo) >> 1)\n' +
-'        {\n' +
-'          if (CommentParser.MAP2[m] > c0) hi = m - 1;\n' +
-'          else if (CommentParser.MAP2[2 + m] < c0) lo = m + 1;\n' +
-'          else {charclass = CommentParser.MAP2[4 + m]; break;}\n' +
-'          if (lo > hi) {charclass = 0; break;}\n' +
-'        }\n' +
-'      }\n' +
-'\n' +
-'      state = code;\n' +
-'      var i0 = (charclass << 4) + code - 1;\n' +
-'      code = CommentParser.TRANSITION[(i0 & 3) + CommentParser.TRANSITION[i0 >> 2]];\n' +
-'\n' +
-'      if (code > 15)\n' +
-'      {\n' +
-'        result = code;\n' +
-'        code &= 15;\n' +
-'        end = current;\n' +
-'      }\n' +
-'    }\n' +
-'\n' +
-'    result >>= 4;\n' +
-'    if (result == 0)\n' +
-'    {\n' +
-'      end = current - 1;\n' +
-'      var c1 = end < size ? input.charCodeAt(end) : 0;\n' +
-'      if (c1 >= 0xdc00 && c1 < 0xe000) --end;\n' +
-'      error(begin, end, state, -1, -1);\n' +
-'    }\n' +
-'\n' +
-'    if (nonbmp)\n' +
-'    {\n' +
-'      for (var i = result >> 3; i > 0; --i)\n' +
-'      {\n' +
-'        --end;\n' +
-'        var c1 = end < size ? input.charCodeAt(end) : 0;\n' +
-'        if (c1 >= 0xdc00 && c1 < 0xe000) --end;\n' +
-'      }\n' +
-'    }\n' +
-'    else\n' +
-'    {\n' +
-'      end -= result >> 3;\n' +
-'    }\n' +
-'\n' +
-'    return (result & 7) - 1;\n' +
-'  }\n' +
-'\n' +
-'  function getExpectedTokenSet(s)\n' +
-'  {\n' +
-'    var set = [];\n' +
-'    if (s > 0)\n' +
-'    {\n' +
-'      for (var i = 0; i < 6; i += 32)\n' +
-'      {\n' +
-'        var j = i;\n' +
-'        for (var f = ec(i >>> 5, s); f != 0; f >>>= 1, ++j)\n' +
-'        {\n' +
-'          if ((f & 1) != 0)\n' +
-'          {\n' +
-'            set[set.length] = CommentParser.TOKEN[j];\n' +
-'          }\n' +
-'        }\n' +
-'      }\n' +
-'    }\n' +
-'    return set;\n' +
-'  }\n' +
-'\n' +
-'  function ec(t, s)\n' +
-'  {\n' +
-'    var i0 = t * 9 + s - 1;\n' +
-'    return CommentParser.EXPECTED[i0];\n' +
-'  }\n' +
-'}\n' +
-'\n' +
-'CommentParser.MAP0 =\n' +
-'[\n' +
-'  /*   0 */ 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2,\n' +
-'  /*  36 */ 2, 2, 2, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
-'  /*  72 */ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
-'  /* 108 */ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2\n' +
-'];\n' +
-'\n' +
-'CommentParser.MAP1 =\n' +
-'[\n' +
-'  /*   0 */ 54, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56,\n' +
-'  /*  27 */ 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56,\n' +
-'  /*  54 */ 88, 120, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147,\n' +
-'  /*  76 */ 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,\n' +
-'  /* 104 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
-'  /* 140 */ 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
-'  /* 176 */ 2, 2, 2\n' +
-'];\n' +
-'\n' +
-'CommentParser.MAP2 =\n' +
-'[\n' +
-'  /* 0 */ 57344, 65536, 65533, 1114111, 2, 2\n' +
-'];\n' +
-'\n' +
-'CommentParser.INITIAL =\n' +
-'[\n' +
-'  /* 0 */ 1, 2\n' +
-'];\n' +
-'\n' +
-'CommentParser.TRANSITION =\n' +
-'[\n' +
-'  /*  0 */ 33, 33, 33, 33, 28, 37, 32, 33, 31, 37, 32, 33, 43, 50, 53, 33, 31, 39, 33, 33, 46, 57, 59, 33, 63, 33, 33,\n' +
-'  /* 27 */ 33, 35, 5, 35, 0, 5, 0, 0, 0, 0, 5, 5, 5, 5, 96, 5, 4, 6, 0, 0, 7, 0, 80, 184, 184, 184, 184, 0, 0, 0, 185,\n' +
-'  /* 58 */ 80, 185, 0, 0, 0, 64, 0, 0, 0\n' +
-'];\n' +
-'\n' +
-'CommentParser.EXPECTED =\n' +
-'[\n' +
-'  /* 0 */ 26, 52, 2, 16, 4, 20, 36, 4, 4\n' +
-'];\n' +
-'\n' +
-'CommentParser.TOKEN =\n' +
-'[\n' +
-'  "(0)",\n' +
-'  "S",\n' +
-'  "CommentContents",\n' +
-'  "EOF",\n' +
-'  "\'(:\'",\n' +
-'  "\':)\'"\n' +
-'];\n' +
-'\n' +
-'                                                            // line 54 "CommentParser.ebnf"\n' +
-'                                                            });\n' +
-'                                                            // line 371 "CommentParser.js"\n' +
-'// End\n' +
+'// This file was generated on Wed Dec 12, 2012 20:06 (UTC+01) by REx v5.20 which is Copyright (c) 1979-2012 by Gunther Rademacher <grd@gmx.net>\n' +
+'// REx command line: CommentParser.ebnf -tree -javascript -a xqlint\n' +
+'\n' +
+'                                                            // line 2 "CommentParser.ebnf"\n' +
+'                                                            /* ***** BEGIN LICENSE BLOCK *****\n' +
+'                                                             * Distributed under the BSD license:\n' +
+'                                                             *\n' +
+'                                                             * Copyright (c) 2010, Ajax.org B.V.\n' +
+'                                                             * All rights reserved.\n' +
+'                                                             *\n' +
+'                                                             * Redistribution and use in source and binary forms, with or without\n' +
+'                                                             * modification, are permitted provided that the following conditions are met:\n' +
+'                                                             *     * Redistributions of source code must retain the above copyright\n' +
+'                                                             *       notice, this list of conditions and the following disclaimer.\n' +
+'                                                             *     * Redistributions in binary form must reproduce the above copyright\n' +
+'                                                             *       notice, this list of conditions and the following disclaimer in the\n' +
+'                                                             *       documentation and/or other materials provided with the distribution.\n' +
+'                                                             *     * Neither the name of Ajax.org B.V. nor the\n' +
+'                                                             *       names of its contributors may be used to endorse or promote products\n' +
+'                                                             *       derived from this software without specific prior written permission.\n' +
+'                                                             *\n' +
+'                                                             * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND\n' +
+'                                                             * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\n' +
+'                                                             * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n' +
+'                                                             * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY\n' +
+'                                                             * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n' +
+'                                                             * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n' +
+'                                                             * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\n' +
+'                                                             * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n' +
+'                                                             * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n' +
+'                                                             * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n' +
+'                                                             *\n' +
+'                                                             * ***** END LICENSE BLOCK ***** */\n' +
+'\n' +
+'                                                            define(\'lib/CommentParser.js\',[\'require\',\'exports\',\'module\'],function(require, exports, module){\n' +
+'                                                            var CommentParser = exports.CommentParser = function CommentParser(string, parsingEventHandler)\n' +
+'                                                            {\n' +
+'                                                              init(string, parsingEventHandler);\n' +
+'                                                            // line 40 "CommentParser.js"\n' +
+'  var self = this;\n' +
+'\n' +
+'  this.ParseException = function(b, e, s, o, x)\n' +
+'  {\n' +
+'    var\n' +
+'      begin = b,\n' +
+'      end = e,\n' +
+'      state = s,\n' +
+'      offending = o,\n' +
+'      expected = x;\n' +
+'\n' +
+'    this.getBegin = function() {return begin;};\n' +
+'    this.getEnd = function() {return end;};\n' +
+'    this.getState = function() {return state;};\n' +
+'    this.getExpected = function() {return expected;};\n' +
+'    this.getOffending = function() {return offending;};\n' +
+'\n' +
+'    this.getMessage = function()\n' +
+'    {\n' +
+'      return offending < 0 ? "lexical analysis failed" : "syntax error";\n' +
+'    };\n' +
+'  };\n' +
+'\n' +
+'  function init(string, parsingEventHandler)\n' +
+'  {\n' +
+'    eventHandler = parsingEventHandler;\n' +
+'    input = string;\n' +
+'    size = string.length;\n' +
+'    reset(0, 0, 0);\n' +
+'  }\n' +
+'\n' +
+'  this.getInput = function()\n' +
+'  {\n' +
+'    return input;\n' +
+'  };\n' +
+'\n' +
+'  function reset(l, b, e)\n' +
+'  {\n' +
+'                 b0 = b; e0 = b;\n' +
+'    l1 = l; b1 = b; e1 = e;\n' +
+'    end = e;\n' +
+'    eventHandler.reset(input);\n' +
+'  }\n' +
+'\n' +
+'  this.getOffendingToken = function(e)\n' +
+'  {\n' +
+'    var o = e.getOffending();\n' +
+'    return o >= 0 ? CommentParser.TOKEN[o] : null;\n' +
+'  };\n' +
+'\n' +
+'  this.getExpectedTokenSet = function(e)\n' +
+'  {\n' +
+'    var expected;\n' +
+'    if (e.getExpected() < 0)\n' +
+'    {\n' +
+'      expected = getExpectedTokenSet(e.getState());\n' +
+'    }\n' +
+'    else\n' +
+'    {\n' +
+'      expected = [CommentParser.TOKEN[e.getExpected()]];\n' +
+'    }\n' +
+'    return expected;\n' +
+'  };\n' +
+'\n' +
+'  this.getErrorMessage = function(e)\n' +
+'  {\n' +
+'    var tokenSet = this.getExpectedTokenSet(e);\n' +
+'    var found = this.getOffendingToken(e);\n' +
+'    var prefix = input.substring(0, e.getBegin());\n' +
+'    var lines = prefix.split("\\n");\n' +
+'    var line = lines.length;\n' +
+'    var column = lines[line - 1].length + 1;\n' +
+'    var size = e.getEnd() - e.getBegin();\n' +
+'    return e.getMessage()\n' +
+'         + (found == null ? "" : ", found " + found)\n' +
+'         + "\\nwhile expecting "\n' +
+'         + (tokenSet.length == 1 ? tokenSet[0] : ("[" + tokenSet.join(", ") + "]"))\n' +
+'         + "\\n"\n' +
+'         + (size == 0 ? "" : "after successfully scanning " + size + " characters beginning ")\n' +
+'         + "at line " + line + ", column " + column + ":\\n..."\n' +
+'         + input.substring(e.getBegin(), Math.min(input.length, e.getBegin() + 64))\n' +
+'         + "...";\n' +
+'  };\n' +
+'\n' +
+'  this.parse_Comments = function()\n' +
+'  {\n' +
+'    eventHandler.startNonterminal("Comments", e0);\n' +
+'    for (;;)\n' +
+'    {\n' +
+'      lookahead1(0);                // S^WS | EOF | \'(:\'\n' +
+'      if (l1 == 3)                  // EOF\n' +
+'      {\n' +
+'        break;\n' +
+'      }\n' +
+'      switch (l1)\n' +
+'      {\n' +
+'      case 1:                       // S^WS\n' +
+'        shift(1);                   // S^WS\n' +
+'        break;\n' +
+'      default:\n' +
+'        parse_Comment();\n' +
+'      }\n' +
+'    }\n' +
+'    shift(3);                       // EOF\n' +
+'    eventHandler.endNonterminal("Comments", e0);\n' +
+'  };\n' +
+'\n' +
+'  function parse_Comment()\n' +
+'  {\n' +
+'    eventHandler.startNonterminal("Comment", e0);\n' +
+'    shift(4);                       // \'(:\'\n' +
+'    for (;;)\n' +
+'    {\n' +
+'      lookahead1(1);                // CommentContents | \'(:\' | \':)\'\n' +
+'      if (l1 == 5)                  // \':)\'\n' +
+'      {\n' +
+'        break;\n' +
+'      }\n' +
+'      switch (l1)\n' +
+'      {\n' +
+'      case 2:                       // CommentContents\n' +
+'        shift(2);                   // CommentContents\n' +
+'        break;\n' +
+'      default:\n' +
+'        parse_Comment();\n' +
+'      }\n' +
+'    }\n' +
+'    shift(5);                       // \':)\'\n' +
+'    eventHandler.endNonterminal("Comment", e0);\n' +
+'  }\n' +
+'\n' +
+'  var lk, b0, e0;\n' +
+'  var l1, b1, e1;\n' +
+'  var eventHandler;\n' +
+'\n' +
+'  function error(b, e, s, l, t)\n' +
+'  {\n' +
+'    throw new self.ParseException(b, e, s, l, t);\n' +
+'  }\n' +
+'\n' +
+'  function shift(t)\n' +
+'  {\n' +
+'    if (l1 == t)\n' +
+'    {\n' +
+'      eventHandler.terminal(CommentParser.TOKEN[l1], b1, e1 > size ? size : e1);\n' +
+'      b0 = b1; e0 = e1; l1 = 0;\n' +
+'    }\n' +
+'    else\n' +
+'    {\n' +
+'      error(b1, e1, 0, l1, t);\n' +
+'    }\n' +
+'  }\n' +
+'\n' +
+'  function lookahead1(set)\n' +
+'  {\n' +
+'    if (l1 == 0)\n' +
+'    {\n' +
+'      l1 = match(set);\n' +
+'      b1 = begin;\n' +
+'      e1 = end;\n' +
+'    }\n' +
+'  }\n' +
+'\n' +
+'  var input;\n' +
+'  var size;\n' +
+'  var begin;\n' +
+'  var end;\n' +
+'  var state;\n' +
+'\n' +
+'  function match(tokenset)\n' +
+'  {\n' +
+'    var nonbmp = false;\n' +
+'    begin = end;\n' +
+'    var current = end;\n' +
+'    var result = CommentParser.INITIAL[tokenset];\n' +
+'\n' +
+'    for (var code = result & 15; code != 0; )\n' +
+'    {\n' +
+'      var charclass;\n' +
+'      var c0 = current < size ? input.charCodeAt(current) : 0;\n' +
+'      ++current;\n' +
+'      if (c0 < 0x80)\n' +
+'      {\n' +
+'        charclass = CommentParser.MAP0[c0];\n' +
+'      }\n' +
+'      else if (c0 < 0xd800)\n' +
+'      {\n' +
+'        var c1 = c0 >> 5;\n' +
+'        charclass = CommentParser.MAP1[(c0 & 31) + CommentParser.MAP1[(c1 & 31) + CommentParser.MAP1[c1 >> 5]]];\n' +
+'      }\n' +
+'      else\n' +
+'      {\n' +
+'        if (c0 < 0xdc00)\n' +
+'        {\n' +
+'          var c1 = current < size ? input.charCodeAt(current) : 0;\n' +
+'          if (c1 >= 0xdc00 && c1 < 0xe000)\n' +
+'          {\n' +
+'            ++current;\n' +
+'            c0 = ((c0 & 0x3ff) << 10) + (c1 & 0x3ff) + 0x10000;\n' +
+'            nonbmp = true;\n' +
+'          }\n' +
+'        }\n' +
+'        var lo = 0, hi = 1;\n' +
+'        for (var m = 1; ; m = (hi + lo) >> 1)\n' +
+'        {\n' +
+'          if (CommentParser.MAP2[m] > c0) hi = m - 1;\n' +
+'          else if (CommentParser.MAP2[2 + m] < c0) lo = m + 1;\n' +
+'          else {charclass = CommentParser.MAP2[4 + m]; break;}\n' +
+'          if (lo > hi) {charclass = 0; break;}\n' +
+'        }\n' +
+'      }\n' +
+'\n' +
+'      state = code;\n' +
+'      var i0 = (charclass << 4) + code - 1;\n' +
+'      code = CommentParser.TRANSITION[(i0 & 3) + CommentParser.TRANSITION[i0 >> 2]];\n' +
+'\n' +
+'      if (code > 15)\n' +
+'      {\n' +
+'        result = code;\n' +
+'        code &= 15;\n' +
+'        end = current;\n' +
+'      }\n' +
+'    }\n' +
+'\n' +
+'    result >>= 4;\n' +
+'    if (result == 0)\n' +
+'    {\n' +
+'      end = current - 1;\n' +
+'      var c1 = end < size ? input.charCodeAt(end) : 0;\n' +
+'      if (c1 >= 0xdc00 && c1 < 0xe000) --end;\n' +
+'      error(begin, end, state, -1, -1);\n' +
+'    }\n' +
+'\n' +
+'    if (nonbmp)\n' +
+'    {\n' +
+'      for (var i = result >> 3; i > 0; --i)\n' +
+'      {\n' +
+'        --end;\n' +
+'        var c1 = end < size ? input.charCodeAt(end) : 0;\n' +
+'        if (c1 >= 0xdc00 && c1 < 0xe000) --end;\n' +
+'      }\n' +
+'    }\n' +
+'    else\n' +
+'    {\n' +
+'      end -= result >> 3;\n' +
+'    }\n' +
+'\n' +
+'    return (result & 7) - 1;\n' +
+'  }\n' +
+'\n' +
+'  function getExpectedTokenSet(s)\n' +
+'  {\n' +
+'    var set = [];\n' +
+'    if (s > 0)\n' +
+'    {\n' +
+'      for (var i = 0; i < 6; i += 32)\n' +
+'      {\n' +
+'        var j = i;\n' +
+'        for (var f = ec(i >>> 5, s); f != 0; f >>>= 1, ++j)\n' +
+'        {\n' +
+'          if ((f & 1) != 0)\n' +
+'          {\n' +
+'            set[set.length] = CommentParser.TOKEN[j];\n' +
+'          }\n' +
+'        }\n' +
+'      }\n' +
+'    }\n' +
+'    return set;\n' +
+'  }\n' +
+'\n' +
+'  function ec(t, s)\n' +
+'  {\n' +
+'    var i0 = t * 9 + s - 1;\n' +
+'    return CommentParser.EXPECTED[i0];\n' +
+'  }\n' +
+'}\n' +
+'\n' +
+'CommentParser.MAP0 =\n' +
+'[\n' +
+'  /*   0 */ 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2,\n' +
+'  /*  36 */ 2, 2, 2, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
+'  /*  72 */ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
+'  /* 108 */ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2\n' +
+'];\n' +
+'\n' +
+'CommentParser.MAP1 =\n' +
+'[\n' +
+'  /*   0 */ 54, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56,\n' +
+'  /*  27 */ 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56,\n' +
+'  /*  54 */ 88, 120, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147,\n' +
+'  /*  76 */ 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 147, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,\n' +
+'  /* 104 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
+'  /* 140 */ 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n' +
+'  /* 176 */ 2, 2, 2\n' +
+'];\n' +
+'\n' +
+'CommentParser.MAP2 =\n' +
+'[\n' +
+'  /* 0 */ 57344, 65536, 65533, 1114111, 2, 2\n' +
+'];\n' +
+'\n' +
+'CommentParser.INITIAL =\n' +
+'[\n' +
+'  /* 0 */ 1, 2\n' +
+'];\n' +
+'\n' +
+'CommentParser.TRANSITION =\n' +
+'[\n' +
+'  /*  0 */ 33, 33, 33, 33, 28, 37, 32, 33, 31, 37, 32, 33, 43, 50, 53, 33, 31, 39, 33, 33, 46, 57, 59, 33, 63, 33, 33,\n' +
+'  /* 27 */ 33, 35, 5, 35, 0, 5, 0, 0, 0, 0, 5, 5, 5, 5, 96, 5, 4, 6, 0, 0, 7, 0, 80, 184, 184, 184, 184, 0, 0, 0, 185,\n' +
+'  /* 58 */ 80, 185, 0, 0, 0, 64, 0, 0, 0\n' +
+'];\n' +
+'\n' +
+'CommentParser.EXPECTED =\n' +
+'[\n' +
+'  /* 0 */ 26, 52, 2, 16, 4, 20, 36, 4, 4\n' +
+'];\n' +
+'\n' +
+'CommentParser.TOKEN =\n' +
+'[\n' +
+'  "(0)",\n' +
+'  "S",\n' +
+'  "CommentContents",\n' +
+'  "EOF",\n' +
+'  "\'(:\'",\n' +
+'  "\':)\'"\n' +
+'];\n' +
+'\n' +
+'                                                            // line 54 "CommentParser.ebnf"\n' +
+'                                                            });\n' +
+'                                                            // line 371 "CommentParser.js"\n' +
+'// End\n' +
 ';\n' +
 '/* ***** BEGIN LICENSE BLOCK *****\n' +
 ' * Distributed under the BSD license:\n' +
