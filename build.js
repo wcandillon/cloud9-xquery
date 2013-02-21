@@ -7,8 +7,9 @@
 
   paths: {
     ext: 'empty:'
-  },
+  }
 
-  optimize: "none"
+
+//,optimize: "none"
 
 })
