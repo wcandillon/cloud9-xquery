@@ -7,15 +7,15 @@
 define(function(require, exports, module) {
 
     var completeUtil = require("ext/codecomplete/complete_util");
-    var xqCompletion = require('./xquery_completion.js');
+    var xqCompletion = require('xquery_completion.js');
     var baseLanguageHandler = require('ext/language/base_handler');
-    var XQueryParser = require('./lib/XQueryParser.js').XQueryParser;
-    var JSONParseTreeHandler = require('./lib/JSONParseTreeHandler.js').JSONParseTreeHandler;
-    var CodeFormatter = require('./lib/visitors/CodeFormatter.js').CodeFormatter;
-    var Compiler = require('./lib/Compiler.js').Compiler;
-    var Utils = require('./lib/utils.js').Utils;
+    var XQueryParser = require('lib/XQueryParser.js').XQueryParser;
+    //var JSONParseTreeHandler = require('lib/JSONParseTreeHandler.js').JSONParseTreeHandler;
+    //var CodeFormatter = require('lib/visitors/CodeFormatter.js').CodeFormatter;
+    var Compiler = require('lib/Compiler.js').Compiler;
+    var Utils = require('lib/utils.js').Utils;
     // var XQueryResolver = require('./XQueryResolver').XQueryResolver; // Waiting for quickfix integration
-    var Refactoring = require('./refactoring').Refactoring;
+    var Refactoring = require('refactoring').Refactoring;
     
     var handler = module.exports = Object.create(baseLanguageHandler);
 
@@ -152,14 +152,14 @@ define(function(require, exports, module) {
      * @return a string value representing the new source code after formatting or null if not supported
      */
     handler.codeFormat = function(doc, callback) {
-        var code = doc.getValue();
-        var h = new JSONParseTreeHandler(code);
-        var parser = new XQueryParser(code, h);
-        parser.parse_XQuery();
-        var ast = h.getParseTree();
-        var codeFormatter = new CodeFormatter(ast);
-        var formatted = codeFormatter.format();
-        callback(formatted);
+//        var code = doc.getValue();
+//        var h = new JSONParseTreeHandler(code);
+//        var parser = new XQueryParser(code, h);
+//        parser.parse_XQuery();
+//        var ast = h.getParseTree();
+//        var codeFormatter = new CodeFormatter(ast);
+//        var formatted = codeFormatter.format();
+//        callback(formatted);
     };
 
     handler.onCursorMovedNode = function(doc, fullAst, cursorPos, currentNode, callback) {

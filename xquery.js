@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
 
       language.registerLanguageHandler(
-        'ext/xquery/xquery-worker',
+        'xquery-worker',
         require('./xquery-worker-built-wrapped.js'));
 
       /*
