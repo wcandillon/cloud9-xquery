@@ -775,6 +775,9 @@ FunctionName
            | 'constraint'
            | 'loop'
            | 'returning'
+           | 'object'
+           | 'json-item'
+           | 'array'
 NCName   ::= NCName^Token
            | 'after'
            | 'and'
