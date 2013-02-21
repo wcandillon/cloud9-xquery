@@ -16,6 +16,7 @@ define(function(require, exports, module) {
     var Utils = require('lib/utils.js').Utils;
     // var XQueryResolver = require('./XQueryResolver').XQueryResolver; // Waiting for quickfix integration
     var Refactoring = require('refactoring').Refactoring;
+    var XQueryBuiltin = require('lib/XQueryBuiltin.js').XQueryBuiltin;
     
     var handler = module.exports = Object.create(baseLanguageHandler);
 
@@ -56,11 +57,10 @@ define(function(require, exports, module) {
     handler.analyze = function(doc, ast, callback) {
                 
         if(builtin === null) {
-          // TODO does this path work?
-          var text = completeUtil.fetchText('/static', 'ext/xquery/lib/builtin.json'); // TODO staticprefix is hardcoded here!
-          builtin = JSON.parse(text);  
+          var xqBuiltin = new XQueryBuiltin();
+          builtin = xqBuiltin.getBuiltin(); 
           if (!builtin){
-              throw "Failed to init builtin @analyze, this.staticPrefix=" + this.staticPrefix;
+              throw "Failed to init builtin @analyze";
           }
         }
         
@@ -94,12 +94,13 @@ define(function(require, exports, module) {
 
     handler.complete = function(doc, fullAst, pos, currentNode, callback) {
 
-        
         if(builtin === null) {
-          var text = completeUtil.fetchText(this.staticPrefix, 'ext/xquery/lib/builtin.json');
-          builtin = JSON.parse(text); 
+          var xqBuiltin = new XQueryBuiltin();
+          builtin = xqBuiltin.getBuiltin(); 
+          if (!builtin){
+              throw "Failed to init builtin @complete";
+          }
         }
-        
         if(schemas === null) {
           var text = completeUtil.fetchText(this.staticPrefix, 'ext/xquery/lib/schemas.json');
           schemas = JSON.parse(text);  
