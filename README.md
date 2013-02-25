@@ -10,4 +10,4 @@ Installation
 Open the `Tools -> Extension Manager` window in Cloud9, and enter the extension
 path:
 
-    https://github.com/ldoblies/cloud9-xquery/blob/master/xquery.js
+    https://github.com/ldoblies/cloud9-xquery/blob/master/plugins-client/ext.xquery/xquery.js
