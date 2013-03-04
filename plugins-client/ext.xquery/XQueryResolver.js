@@ -57,7 +57,7 @@ var XQueryResolver = function(ast){
            levenshteinDistance(str1,i+1,len1-1,str2,j+1,len2-1)+cost);
        memo[key] = dist;
        return dist;
-    }   
+    }
     
     function lDistance(str1, str2){
         memo = [];
@@ -78,13 +78,6 @@ var XQueryResolver = function(ast){
             return "";
         }
     }
-
-    function endsWith(str, end){
-        if (str.length < end.length)
-            return false;
-        return str.substring(str.length - end.length) === end;
-    }
-    
     
     this.getModulesContainingFunction = function(fun){
         var ret = [];
@@ -106,35 +99,14 @@ var XQueryResolver = function(ast){
         if (!this.builtin){
             this.builtin = {};
         }
-        var type = this.getType(marker);
-        if (type){
-            if (typeof this[type] === 'function'){
-                return this[type](marker);
+        var name = marker.name;
+        if (name){
+            if (typeof this[name] === 'function'){
+                return this[name](marker);
             }
         }
        return [];
     };
-    
-    this.getType = function(marker){
-        var msg = marker.message;
-        if (msg[0] === '$' && endsWith(msg, ': unused variable.')){
-            return "unusedVar";
-        }
-        if (msg[0] === '"'){
-            if (endsWith(msg, ': unused namespace prefix.')){
-                return "unusedNamespace";
-            } else if (endsWith(msg, '".')
-            && msg.indexOf('": is already available with the prefix "') != -1){
-                 return "duplicateNamespace";
-            }
-        }
-        var errCode = marker.message.substring(1, 9);
-        if (errCode.length < 8){
-            return;
-        }
-        return errCode;
-    };
-    
     
     //-----------------------------------
     // MARKER HANDLERS
@@ -153,7 +125,7 @@ var XQueryResolver = function(ast){
         return [markerResolution(label,image,preview,appliedContent)];
     };
     
-    this.unusedNamespace = function(marker){
+    this.unusedNsPrefix = function(marker){
         var _self = this;
         var ret = [];
         
@@ -165,7 +137,7 @@ var XQueryResolver = function(ast){
             // check for each XPST0081 (nonExpandablePrefix:localName) whether 
             // unusedNs contains localName, if so suggest to rename unusedPrefix
             // to nonExpandablePrefix
-            if (_self.getType(mrk) == "XPST0081"){
+            if (mrk.name == "XPST0081"){
                 var nonExpandablePrefix = mrk.prefix;
                 var localName = mrk.localName;
                 var preview = "<b>Rename Unused Namespace Prefix</b>";
@@ -194,7 +166,7 @@ var XQueryResolver = function(ast){
         return ret;
     };
     
-    this.duplicateNamespace = this.XQST0033 = function(marker){
+    this.duplicateNs = this.XQST0033 = function(marker){
         var label = "Remove duplicate namespace prefix";
         var image = IMG_DELETE;
         
@@ -248,7 +220,7 @@ var XQueryResolver = function(ast){
         // Resolution 2: Rename existing module import
         var nsRenames = [];
         ast.markers.forEach(function(mrk){
-            if (_self.getType(mrk) == "unusedNamespace" && mrk.nsType === 'module'){
+            if (mrk.name == "unusedNamespace" && mrk.nsType === 'module'){
                 var unusedPrefix = mrk.message.split('"')[1];
                 if (!nsRenames[unusedPrefix]){
                     nsRenames[unusedPrefix] = true;
