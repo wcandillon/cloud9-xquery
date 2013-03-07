@@ -14,7 +14,7 @@ define(function(require, exports, module) {
     //var CodeFormatter = require('lib/visitors/CodeFormatter.js').CodeFormatter;
     var Compiler = require('lib/Compiler.js').Compiler;
     var Utils = require('lib/utils.js').Utils;
-    // var XQueryResolver = require('./XQueryResolver').XQueryResolver; // Waiting for quickfix integration
+    var XQueryResolver = require('XQueryResolver.js').XQueryResolver;
     var Refactoring = require('refactoring').Refactoring;
     var XQueryBuiltin = require('lib/XQueryBuiltin.js').XQueryBuiltin;
     
@@ -71,14 +71,10 @@ define(function(require, exports, module) {
         var markers = ast.markers;
         
         // Generate resolutions
-        // Commented out on purpose - waiting for quickfix extension to be 
-        // integrated into cloud9
-        /*
-        var resolver = new XQueryResolver(ast);
+        var resolver = new XQueryResolver(doc,ast);
         markers.forEach(function(curMarker){
             curMarker.resolutions = resolver.getResolutions(curMarker, builtin);
         });
-        */
         
         var error = ast.error;
         //If syntax error, don't show warnings?

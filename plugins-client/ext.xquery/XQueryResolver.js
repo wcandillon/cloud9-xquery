@@ -33,7 +33,7 @@ var ADD = {
  * Resolver for xquery markers. getResolutions(marker) generates
  * MarkerResolutions for the given marker and returns them in a list
  */
-var XQueryResolver = function(ast){
+var XQueryResolver = function(doc, ast){
     
 
     
