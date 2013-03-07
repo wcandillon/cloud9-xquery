@@ -6,10 +6,10 @@ define(function(require, exports, module) {
 var markerResolution = require('ext/language/MarkerResolution').MarkerResolution;
 
 // Visitors
-var VariableRemover = require('./lib/visitors/VariableRemover.js').VariableRemover;
-var NamespaceRemover = require('./lib/visitors/NamespaceRemover.js').NamespaceRemover;
-var Renamer = require('./lib/visitors/Renamer.js').Renamer;
-var Adder = require('./lib/visitors/Adder.js').Adder;
+var VariableRemover = require('lib/visitors/VariableRemover.js').VariableRemover;
+var NamespaceRemover = require('lib/visitors/NamespaceRemover.js').NamespaceRemover;
+var Renamer = require('lib/visitors/Renamer.js').Renamer;
+var Adder = require('lib/visitors/Adder.js').Adder;
 
 
 // TODO change to c9 quickfix images
