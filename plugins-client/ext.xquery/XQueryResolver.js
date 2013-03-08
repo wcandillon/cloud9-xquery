@@ -6,10 +6,10 @@ define(function(require, exports, module) {
 var markerResolution = require('ext/language/MarkerResolution').MarkerResolution;
 
 // Visitors
-var VariableRemover = require('./lib/visitors/VariableRemover.js').VariableRemover;
-var NamespaceRemover = require('./lib/visitors/NamespaceRemover.js').NamespaceRemover;
-var Renamer = require('./lib/visitors/Renamer.js').Renamer;
-var Adder = require('./lib/visitors/Adder.js').Adder;
+var VariableRemover = require('lib/visitors/VariableRemover.js').VariableRemover;
+var NamespaceRemover = require('lib/visitors/NamespaceRemover.js').NamespaceRemover;
+var Renamer = require('lib/visitors/Renamer.js').Renamer;
+var Adder = require('lib/visitors/Adder.js').Adder;
 
 
 // TODO change to c9 quickfix images
@@ -33,7 +33,7 @@ var ADD = {
  * Resolver for xquery markers. getResolutions(marker) generates
  * MarkerResolutions for the given marker and returns them in a list
  */
-var XQueryResolver = function(ast){
+var XQueryResolver = function(doc, ast){
     
 
     
@@ -62,6 +62,21 @@ var XQueryResolver = function(ast){
     function lDistance(str1, str2){
         memo = [];
         return levenshteinDistance(str1, 0, str1.length, str2, 0, str2.length);
+    }
+
+    function Range(sl, sc, el, ec){
+      var start = {
+        row: sl,
+        column: sc
+      };
+      var end = {
+        row: el,
+        column: ec
+      };
+      return {
+        start: start,
+        end: end
+      };
     }
     
     function astToText(node){
@@ -122,7 +137,7 @@ var XQueryResolver = function(ast){
           
         var appliedContent = astToText(removedAst);
         var preview = "<b>Remove Unused Variable <i>" + variable + "</i><b>";
-        return [markerResolution(label,image,preview,appliedContent)];
+        return [markerResolution(label,image,preview,getDeltas(appliedContent))];
     };
     
     this.unusedNsPrefix = function(marker){
@@ -162,7 +177,7 @@ var XQueryResolver = function(ast){
         var appliedContent = astToText(removedAst);
         var preview = "<b>Remove Unused Module Import</b>";
         preview += '<br/><br/><del><i>' + remover.getRemovedString() + '</del></i>';        
-        ret.push(markerResolution(label,image,preview,appliedContent));
+        ret.push(markerResolution(label,image,preview,getDeltas(appliedContent)));
         return ret;
     };
     
@@ -176,7 +191,7 @@ var XQueryResolver = function(ast){
         var appliedContent = astToText(removedAst);
         var preview = "<b>Remove Duplicate Namespace Prefix</b>";
         preview += "<br/><br/><i><del>" + remover.getRemovedString() + "</del></i>";
-        return [markerResolution(label,image,preview,appliedContent)];
+        return [markerResolution(label,image,preview,getDeltas(appliedContent))];
     };
     
     /** Can not expand namespace prefix to URI */
@@ -215,7 +230,7 @@ var XQueryResolver = function(ast){
                    renameType: RENAME.prefix
                 });
             }
-        });        
+        });
         
         // Resolution 2: Rename existing module import
         var nsRenames = [];
@@ -295,6 +310,20 @@ var XQueryResolver = function(ast){
     //-----------------------------------
     // MarkerResolutions
     //-----------------------------------
+
+    function getDeltas(str){
+      var deltas = [];
+      deltas.push({
+        action: "removeText",
+        range: Range(0, 0, 100000, 0)
+      });
+      deltas.push({
+        action: "insertText",
+        range: Range(0, 0, 100000, 0),
+        text: str
+      });
+      return deltas;
+    }
     
     this.resRename = function(marker, label, toName, renameType, preview){
         var image = IMG_CHANGE;
@@ -303,7 +332,7 @@ var XQueryResolver = function(ast){
 
         switch (renameType){
             case RENAME.name:
-                newAst = renamer.rename(marker.pos, toName);    
+                newAst = renamer.rename(marker.pos, toName);
                 break;
             case RENAME.prefix:
                 newAst = renamer.renamePrefix(marker.pos, toName);
@@ -311,10 +340,11 @@ var XQueryResolver = function(ast){
             default:
                 throw "Illegal renameType";
         }
-          
+
         var appliedContent = astToText(newAst);
+
         preview = preview || appliedContent;
-        var ret = markerResolution(label,image,preview,appliedContent);
+        var ret = markerResolution(label,image,preview,getDeltas(appliedContent));
         ret.toName = toName;
         ret.renameType = renameType;
         return ret;
@@ -342,7 +372,9 @@ var XQueryResolver = function(ast){
         
         var appliedContent = astToText(newAst);
         preview = preview || appliedContent;
-        var ret = markerResolution(label,image,preview,appliedContent,newAst.cursorTarget);
+
+
+        var ret = markerResolution(label,image,preview,getDeltas(appliedContent),newAst.cursorTarget);
         ret.addType = addType;
         return ret;
     };
@@ -375,7 +407,7 @@ var XQueryResolver = function(ast){
     };
     
     this.resDebug = function(label, preview){
-      return markerResolution(label, IMG_ADD, preview, preview);  
+      return markerResolution(label, IMG_ADD, preview, getDeltas(preview));  
     };
  
     

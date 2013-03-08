@@ -6,7 +6,8 @@
   out: "xquery-worker-built.js",
 
   paths: {
-    ext: 'empty:'
+    ext: 'empty:',
+    ace: 'empty:'
   }
 
 
