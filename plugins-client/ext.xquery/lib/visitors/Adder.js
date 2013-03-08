@@ -30,7 +30,7 @@
 
 define(function(require, exports, module){
 
-  var Positioner = require("./Positioner.js").Positioner;
+  var Positioner = require("lib/visitors/Positioner.js").Positioner;
   //var Positioner = require("/ext/xquery/lib/visitors/Positioner").Positioner;
 
 
