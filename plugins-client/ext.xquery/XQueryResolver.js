@@ -63,6 +63,21 @@ var XQueryResolver = function(doc, ast){
         memo = [];
         return levenshteinDistance(str1, 0, str1.length, str2, 0, str2.length);
     }
+
+    function Range(sl, sc, el, ec){
+      var start = {
+        row: sl,
+        column: sc
+      };
+      var end = {
+        row: el,
+        column: ec
+      };
+      return {
+        start: start,
+        end: end
+      };
+    }
     
     function astToText(node){
         if (node !== undefined){
@@ -300,11 +315,11 @@ var XQueryResolver = function(doc, ast){
       var deltas = [];
       deltas.push({
         action: "removeText",
-        range: new Range(0, 0, 100000, 0)
+        range: Range(0, 0, 100000, 0)
       });
       deltas.push({
         action: "insertText",
-        range: new Range(0, 0, 100000, 0),
+        range: Range(0, 0, 100000, 0),
         text: str
       });
       return deltas;
