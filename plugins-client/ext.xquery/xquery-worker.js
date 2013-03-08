@@ -70,15 +70,22 @@ define(function(require, exports, module) {
     handler.analyzeSync = function(doc, ast, builtin) {
         var markers = ast.markers;
         
-        // Generate resolutions
+        var error = ast.error;
+        //If syntax error, don't show warnings?
+        return markers;
+    };
+    
+    handler.getResolutions = function(doc, ast, markers, callback){
         var resolver = new XQueryResolver(doc,ast);
         markers.forEach(function(curMarker){
             curMarker.resolutions = resolver.getResolutions(curMarker, builtin);
         });
-        
-        var error = ast.error;
-        //If syntax error, don't show warnings?
-        return markers;
+        callback(markers);
+    };
+
+    handler.hasResolution = function(doc, ast, marker){
+      var resolver = new XQueryResolver(doc,ast);
+      return (marker.resolutions && marker.resolutions.length || resolver.getType(marker));
     };
 
     handler.outline = function(doc, ast, callback) {
