@@ -1,7 +1,7 @@
 cloud9-xquery
 =============
 
-XQuery extension for cloud9 IDE
+A legacy XQuery extension for cloud9 V2 IDE
 
 
 Installation
